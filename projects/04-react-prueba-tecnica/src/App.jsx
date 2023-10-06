@@ -3,7 +3,7 @@ import './App.css'
 
 const CAT_ENDPOINT_RANDOM_FACT = 'https://catfact.ninja/fact'
 const CAT_ENDPOINT_IMAGE_URL = `https://api.thecatapi.com/v1/images/search`
-
+const CAT_PREFIX_IMAGE_URL = `https://cataas.com/`
 export function App() {
     const [fact, setFact] = useState("lorem ipsum fact whatever")
     const [imageURL, setImageURL] = useState()
@@ -59,14 +59,16 @@ export function App() {
         if (!fact) return
 
         const firstWord = fact.split(" ")[0]
-        const threeWords = fact.split(" ").splice(0, 3).join(" ")
+        const threeFirstWords = fact.split(" ", 3).join(" ")
+        console.log(threeFirstWords)
         //las tres palabras se pasan en el fetch a la api pero la del ejercicio no funciona,
         //por lo que se va a usar una api que devulve imágenes aleatorias
 
-        fetch(CAT_ENDPOINT_IMAGE_URL)
+        fetch(`https://cataas.com/cat/says/${threeFirstWords}?size=50&color=red&json=true`)
             .then(res => res.json())
             .then(response => {
-                const { url } = response[0]
+                console.log(response)
+                const { url } = response
                 setImageURL(url)
             })
     }, [fact])
@@ -78,7 +80,7 @@ export function App() {
             <h1>Random Cat Fact</h1>
 
             {fact && <p>{fact}</p>/*renderizado condicional*/}
-            {imageURL && <img src={imageURL} alt={`Image extracted using the first three words for ${fact}`} />}
+            {imageURL && <img src={`${CAT_PREFIX_IMAGE_URL}${imageURL}`} alt={`Image extracted using the first three words for ${fact}`} />}
 
         </main >
     )
